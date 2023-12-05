@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class BadArrowBehavior : MonoBehaviour
 {
+    private Animator animator;
+
     Rigidbody2D rb;
     Quaternion targetRotation;
 
@@ -17,6 +19,8 @@ public class BadArrowBehavior : MonoBehaviour
     //public AudioClip breakClip;
     public void Awake()
     {
+        animator = GetComponent<Animator>();
+
         //AudioListener.pause = false;
         rb = GetComponent<Rigidbody2D>();
 
@@ -41,8 +45,9 @@ public class BadArrowBehavior : MonoBehaviour
         source = GetComponent<AudioSource>();
         if (collider.gameObject.tag == "Ground" || collider.gameObject.tag == "Platform")
         {
+            rb.velocity = Vector3.zero;
+            animator.SetBool("isBreak", true);
             source.Play();
-            Destroy(this.gameObject,0.06f);
             
         }
         if (collider.gameObject.tag == "Player")
@@ -52,5 +57,10 @@ public class BadArrowBehavior : MonoBehaviour
             canvas.GetComponent<ScreenManager>().GameOver();
             timer.GetComponent<Timer>().RecordTime();  
         }
+    }
+
+    private void BreakArrow()
+    {
+        Destroy(this.gameObject, 0.06f);
     }
 }

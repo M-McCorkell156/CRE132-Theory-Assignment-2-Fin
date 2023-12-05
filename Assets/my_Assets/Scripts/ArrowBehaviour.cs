@@ -7,6 +7,8 @@ using UnityEngine.Serialization;
 public class ArrowBehaviour : MonoBehaviour
 
 {
+    private Animator animator;
+
     Rigidbody2D rb;
     Quaternion targetRotation;
 
@@ -20,16 +22,19 @@ public class ArrowBehaviour : MonoBehaviour
 
     public void Awake()
     {
+        animator = GetComponent<Animator>();
         secret = GameObject.Find("SecretTrophy");
         rb = GetComponent<Rigidbody2D>();
+        source = GetComponent<AudioSource>();
     }
     private void FixedUpdate()
-    {
+    {   
         //source = AudioSource.find
          Vector3 gravity = GameObject.Find("Ground Position").transform.position;
 
          //Vector2 gravityDirection; //Use the direction you calculated
          targetRotation = Quaternion.LookRotation(new Vector3(0, 0, rb.transform.position.z), gravity);
+        if (targetRotation != null) 
          transform.rotation = Quaternion.Slerp(rb.transform.rotation, targetRotation, rotatespeed * Time.fixedDeltaTime);
          //Debug.Log(rb.transform.rotation);       
         
@@ -37,12 +42,12 @@ public class ArrowBehaviour : MonoBehaviour
 
     
     private void OnTriggerEnter2D(Collider2D collider)
-    {
-        source = GetComponent<AudioSource>();
+    {   
         if (collider.gameObject.tag == "Ground" || collider.gameObject.tag == "Platform")
         {
-            source.Play();
-            Destroy(this.gameObject);
+            rb.velocity = Vector3.zero;
+            animator.SetBool("isBreak", true);
+            source.Play();           
         }
         if(collider.gameObject.tag == "BadGuy")
         {
@@ -51,4 +56,8 @@ public class ArrowBehaviour : MonoBehaviour
         }       
     }
 
+    private void BreakArrow()
+    {
+        Destroy(this.gameObject);
+    }
 }

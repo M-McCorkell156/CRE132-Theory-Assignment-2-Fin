@@ -11,7 +11,6 @@ public class Player_Movement : MonoBehaviour
     private float playerSpeed = 8f;
     [SerializeField] private float jumpingPower = 16f;
     private bool isFacingRight = true;
-    public bool canMove = true;
 
     private Animator animator;
     [SerializeField] private Rigidbody2D rb;
@@ -21,7 +20,6 @@ public class Player_Movement : MonoBehaviour
 
     private void Awake()
     {
-        canMove = true;
         animator = GetComponent<Animator>();
     }
     void Update()
@@ -41,19 +39,15 @@ public class Player_Movement : MonoBehaviour
 
             if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
             {
+                //Debug.Log("Jumping");
                 rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
                 animator.SetBool("IsJump", true);
             }
 
             if (!Input.GetButton("Jump") && IsGrounded())
             {
+                //Debug.Log("Landed");
                 animator.SetBool("IsJump", false);
-            }
-
-            if (Input.GetButton("Horizontal") && IsGrounded())
-            {
-                //Debug.Log("Moving");
-                animator.SetBool("IsWalk", true);
             }
 
             if (Input.GetButton("Horizontal") && IsGrounded())
@@ -83,6 +77,7 @@ public class Player_Movement : MonoBehaviour
 
             if (IsGrounded())
             {
+                //Debug.Log("on ground");
                 animator.SetBool("IsFall", false);
             }
 

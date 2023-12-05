@@ -13,10 +13,12 @@ public class RotateTowardsMouse2D : MonoBehaviour
 
     public bool canFire;
     public float fireRate;
+    private AudioSource source;
 
     private void Start()
     {
         canFire = true;
+        source = GetComponent<AudioSource>();
     }
     void Update()
     {
@@ -28,6 +30,7 @@ public class RotateTowardsMouse2D : MonoBehaviour
 
         if (Input.GetButtonDown("Fire") && canFire == true)
         {
+            source.Play();
             Fire();          
         }
 
